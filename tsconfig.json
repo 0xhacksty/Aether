@@ -4,6 +4,7 @@
     { "path": "./packages/shared" },
     { "path": "./packages/cdp" },
     { "path": "./packages/perceiver" },
+    { "path": "./packages/actor" },
     { "path": "./fixtures" },
     { "path": "./apps/cli" }
   ]

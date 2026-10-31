@@ -48,6 +48,18 @@ importers:
         specifier: ^22.10.2
         version: 22.20.5
 
+  packages/actor:
+    dependencies:
+      '@aether/cdp':
+        specifier: workspace:*
+        version: link:../cdp
+      '@aether/perceiver':
+        specifier: workspace:*
+        version: link:../perceiver
+      '@aether/shared':
+        specifier: workspace:*
+        version: link:../shared
+
   packages/cdp:
     dependencies:
       '@aether/shared':

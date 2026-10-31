@@ -1,0 +1,10 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./packages/shared" },
+    { "path": "./packages/cdp" },
+    { "path": "./packages/perceiver" },
+    { "path": "./fixtures" },
+    { "path": "./apps/cli" }
+  ]
+}

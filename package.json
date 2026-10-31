@@ -1,0 +1,22 @@
+{
+  "name": "aether-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Aether: Authentic Agentic Browser Engine",
+  "scripts": {
+    "build": "pnpm -r run build",
+    "typecheck": "tsc --build --verbose",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "probe": "tsx apps/cli/src/index.ts probe"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/ws": "^8.5.13",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8",
+    "zod": "^3.24.1",
+    "ws": "^8.18.0"
+  }
+}

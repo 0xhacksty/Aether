@@ -8,11 +8,12 @@ async function main() {
   if (command === 'probe') {
     const url = args[1];
     if (!url) {
-      console.error('Usage: aether probe <url>');
+      console.error('Usage: aether probe <url> [--headed]');
       process.exit(1);
     }
+    const isHeaded = args.includes('--headed') || args.includes('--visible');
     try {
-      await runProbe(url, true);
+      await runProbe(url, true, !isHeaded);
     } catch (err) {
       console.error('Probe failed:', err);
       process.exit(1);
@@ -20,7 +21,7 @@ async function main() {
   } else {
     console.log(`Aether: Authentic Agentic Browser Engine
 Commands:
-  probe <url>    Inspect a web page outline, element refs, tokens and frames
+  probe <url> [--headed]    Inspect a web page outline, element refs, tokens and frames
 `);
   }
 }

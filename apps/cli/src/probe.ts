@@ -12,8 +12,12 @@ export interface ProbeResult {
   outlineText: string;
 }
 
-export async function runProbe(url: string, verbose = true): Promise<ProbeResult> {
-  const browser = await ChromeLauncher.launch({ headless: true });
+export async function runProbe(
+  url: string,
+  verbose = true,
+  headless = true,
+): Promise<ProbeResult> {
+  const browser = await ChromeLauncher.launch({ headless });
   let client: CDPClient | null = null;
 
   try {
@@ -65,7 +69,7 @@ export async function runProbe(url: string, verbose = true): Promise<ProbeResult
     await new Promise((r) => setTimeout(r, 400));
 
     // Initialize frame tree
-    await frameManager.initFromSession(session);
+    await frameManager.initFromSession(session, client);
 
     // Capture with Perceiver
     const perceiver = new Perceiver();
@@ -93,6 +97,11 @@ export async function runProbe(url: string, verbose = true): Promise<ProbeResult
       console.log('----------------------------------------------------');
       console.log(result.outlineText);
       console.log('----------------------------------------------------');
+    }
+
+    if (!headless) {
+      console.log('[Headed mode] Browser is open on screen. Waiting 5 seconds before closing...');
+      await new Promise((r) => setTimeout(r, 5000));
     }
 
     return result;

@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 240" width="100%" height="100%">
+  <defs>
+    <!-- Background glow & gradients -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0a14"/>
+      <stop offset="100%" stop-color="#030308"/>
+    </linearGradient>
+    
+    <linearGradient id="prismGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00F0FF"/>
+      <stop offset="45%" stop-color="#7000FF"/>
+      <stop offset="100%" stop-color="#FF007A"/>
+    </linearGradient>
+
+    <linearGradient id="beamGrad" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" stop-color="#00F0FF" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#7000FF" stop-opacity="0"/>
+    </linearGradient>
+
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="70%" stop-color="#E2E8F0"/>
+      <stop offset="100%" stop-color="#94A3B8"/>
+    </linearGradient>
+
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="ambient" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="25" result="blur"/>
+    </filter>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="800" height="240" rx="20" fill="url(#bgGrad)"/>
+  <rect width="798" height="238" x="1" y="1" rx="19" fill="none" stroke="#1E293B" stroke-width="1.5"/>
+
+  <!-- Ambient Light Orb -->
+  <circle cx="130" cy="120" r="60" fill="#7000FF" opacity="0.35" filter="url(#ambient)"/>
+  <circle cx="160" cy="110" r="45" fill="#00F0FF" opacity="0.25" filter="url(#ambient)"/>
+
+  <!-- Glyph Icon: The Delta-Aether Prism -->
+  <g transform="translate(60, 45)">
+    <!-- Outer Delta Frame -->
+    <path d="M 70 20 L 125 125 L 15 125 Z" 
+          fill="none" 
+          stroke="url(#prismGrad)" 
+          stroke-width="5" 
+          stroke-linejoin="round"
+          filter="url(#glow)"/>
+
+    <!-- Inner Refraction Core (Aether Eye) -->
+    <polygon points="70,55 98,110 42,110" fill="url(#prismGrad)" opacity="0.25"/>
+    <circle cx="70" cy="92" r="10" fill="#00F0FF" filter="url(#glow)"/>
+
+    <!-- Laser Scanning Beam (Perception Vector) -->
+    <line x1="70" y1="92" x2="155" y2="92" stroke="url(#beamGrad)" stroke-width="2.5" stroke-dasharray="4 2"/>
+    
+    <!-- Dynamic Corner Nodes -->
+    <circle cx="70" cy="20" r="4" fill="#00F0FF"/>
+    <circle cx="125" cy="125" r="4" fill="#FF007A"/>
+    <circle cx="15" cy="125" r="4" fill="#7000FF"/>
+  </g>
+
+  <!-- Brand Typography -->
+  <!-- Main Title: AETHER -->
+  <text x="245" y="122" 
+        font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" 
+        font-size="64" 
+        font-weight="900" 
+        letter-spacing="12" 
+        fill="url(#textGrad)">
+    AETHER
+  </text>
+
+  <!-- Tagline: Subtitle -->
+  <text x="250" y="158" 
+        font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" 
+        font-size="14" 
+        font-weight="600" 
+        letter-spacing="4.5" 
+        fill="#00F0FF">
+    AUTHENTIC AGENTIC BROWSER ENGINE
+  </text>
+
+  <!-- Architectural Badges -->
+  <g transform="translate(250, 175)">
+    <!-- Delta Perception Badge -->
+    <rect width="112" height="22" rx="4" fill="#0F172A" stroke="#334155" stroke-width="1"/>
+    <text x="10" y="15" font-family="monospace" font-size="10.5" font-weight="600" fill="#38BDF8">DELTA-FIRST</text>
+
+    <!-- Stock Chrome Badge -->
+    <rect x="120" width="105" height="22" rx="4" fill="#0F172A" stroke="#334155" stroke-width="1"/>
+    <text x="130" y="15" font-family="monospace" font-size="10.5" font-weight="600" fill="#A855F7">FLAT CDP</text>
+
+    <!-- Zero-Token Human Bridge Badge -->
+    <rect x="233" width="130" height="22" rx="4" fill="#0F172A" stroke="#334155" stroke-width="1"/>
+    <text x="243" y="15" font-family="monospace" font-size="10.5" font-weight="600" fill="#EC4899">HUMAN BRIDGE</text>
+  </g>
+</svg>

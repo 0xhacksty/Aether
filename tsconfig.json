@@ -6,6 +6,8 @@
     { "path": "./packages/perceiver" },
     { "path": "./packages/actor" },
     { "path": "./fixtures" },
-    { "path": "./apps/cli" }
+    { "path": "./apps/cli" },
+    { "path": "./apps/native-host" },
+    { "path": "./apps/extension" }
   ]
 }

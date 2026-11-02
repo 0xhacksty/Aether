@@ -60,6 +60,23 @@ Runs all 12 unit and end-to-end acceptance tests across local fixtures (includin
 pnpm test
 ```
 
+### 4. Connect an MCP host
+
+Aether exposes its browser tools through a local stdio MCP server. Run `pnpm build`, then configure the MCP host to launch the compiled server. It launches an isolated Chrome profile and keeps JSON-RPC on stdout. On Windows, configure the host to run:
+
+```json
+{
+  "mcpServers": {
+    "aether": {
+      "command": "node",
+      "args": ["D:\\Agentic Browser\\aether\\apps\\cli\\dist\\index.js", "mcp", "--headless"]
+    }
+  }
+}
+```
+
+The server advertises `navigate`, `act`, `find`, `read`, `screenshot`, `ask`, and `done`. Page-derived text is returned inside `<page untrusted>` tags. Use `pnpm mcp` to launch a visible Chrome window or pass `--headless` for an isolated headless run.
+
 ---
 
 ## 🔬 Benchmark Results (Step 1 & Step 2 Baseline)

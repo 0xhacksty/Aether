@@ -1,0 +1,26 @@
+{
+  "name": "@aether/extension",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wxt",
+    "build": "wxt build",
+    "prepare": "wxt prepare",
+    "clean": "rimraf .output .wxt"
+  },
+  "dependencies": {
+    "@aether/shared": "workspace:*",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.1.39",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@wxt-dev/module-react": "^1.2.0",
+    "typescript": "^5.7.2",
+    "vite": "^8.3.5",
+    "wxt": "^0.21.5"
+  }
+}

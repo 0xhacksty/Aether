@@ -1,0 +1,9 @@
+{
+    "path":  "D:\\Agentic Browser\\aether\\apps\\native-host\\aether-native-host.cmd",
+    "description":  "Aether local browser bridge",
+    "name":  "com.aether.browser",
+    "allowed_origins":  [
+                            "chrome-extension://cdlgokeaccggbpfkaekcohllcfcacofj/"
+                        ],
+    "type":  "stdio"
+}

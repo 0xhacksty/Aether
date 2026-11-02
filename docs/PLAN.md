@@ -38,7 +38,8 @@ Everything in this document serves that sentence. Anything that does not is out 
 | Storage | SQLite through `better-sqlite3`, file at `~/.aether/aether.db` | Local only. One file. |
 | Tests | vitest plus a local fixture server (Node `http`) | Deterministic pages for iframes, shadow DOM, long lists. |
 | Lint and format | Biome / ESLint | Consistent code style. |
-| LLM | Anthropic Messages API with prompt caching. One adapter in v1. Model IDs live in config. | Native tool use and caching on a stable prefix, which our prompt layout depends on. |
+| Agent reasoning | The connected MCP host supplies its configured model and agent loop. Aether does not require an LLM API key for browser tool use. | Keeps provider choice and model policy with the user's agent host. |
+| Agent connection | Official `@modelcontextprotocol/sdk` over stdio, bridged to the extension through loopback WebSocket and the native messaging host | Connects an MCP agent to the real Chrome profile without adding an agent framework. |
 | OS | Windows first, macOS in Step 9 | Assumption. Native host registration differs per OS. |
 
 ---
@@ -50,16 +51,17 @@ Chrome (UI, tabs, profile)
    |  chrome.debugger  (CDP, flat sessions)
 Companion extension (MV3, side panel)
    |  native messaging  (stdio, length-prefixed JSON)
-aether-native-host  ----- imports ----->  engine
-                                           Perceiver | Actor | Brain
-                                           Policy    | Handoff | Log
-                                              |
-                                           LLM adapter (Anthropic)
+aether-native-host  ----- loopback WebSocket ----->  aether MCP server
+                                                        |  MCP stdio
+                                                        |  MCP host / agent reasoning
+                                                        |
+                                                     engine
+                                           Perceiver | Actor | Policy | Log
 
-Eval path:  aether probe | aether run --> engine --> DirectCDP --> Chrome
+Eval path:  aether probe --> engine --> DirectCDP --> isolated Chrome
 ```
 
-One codebase, two entry points. `aether-native-host` is spawned by Chrome through `connectNative` and runs only while the extension port is open. `aether-cli` is standalone and drives Chrome for probes and evals.
+One codebase, two browser transports. `aether-native-host` is spawned by Chrome through `connectNative`, relays extension commands to the MCP server over a loopback WebSocket, and runs only while the extension port is open. The MCP server speaks stdio to the agent host. The CLI probe and deterministic fixtures continue to use Direct CDP.
 
 ---
 
@@ -106,13 +108,22 @@ frame 1 http://127.0.0.1:4001
 - Settle: Poll structural AX hash every 150ms until two match, with a 2.5s cap.
 
 ### 5.3 Brain & Prompt
-- Append-only prompt layout: System prompt -> Tool definitions -> Compact History (one line per step) -> Current Delta/Snapshot.
+- The connected MCP host owns model choice, prompt layout, and the agent loop.
+- Aether is a tool server and never sends a page to a model itself.
 - Tools: `navigate`, `act`, `find`, `read`, `screenshot`, `ask`, `done`.
 
 ### 5.4 Policy & Handoff
 - Four outcomes: `allow`, `needs_approval`, `human_must_perform`, `refuse`.
 - Sensitive passwords and payment actions are gated.
 - Non-blocking human takeover and inspect pick mode.
+
+### 5.5 MCP connection
+- The MCP server uses the official TypeScript SDK over stdio. The MCP host supplies reasoning; this does not add an agent framework to Aether.
+- The MCP server exposes exactly the seven tools in the locked Brain & Prompt spec and validates their arguments using the schemas in `packages/shared`.
+- Step 3 tests the MCP tools over Direct CDP using an isolated Chrome profile.
+- Step 4 connects the real-profile extension to the MCP server through the native host and a loopback WebSocket. The MCP server binds only to `127.0.0.1`; the WebSocket handshake requires the extension origin and a short-lived token stored under `~/.aether/`.
+- All bridge request, response, and event messages are zod schemas in `packages/shared`.
+- All page-derived text returned by tools is enclosed in `<page untrusted>` tags.
 
 ---
 
@@ -124,3 +135,25 @@ frame 1 http://127.0.0.1:4001
 4. Capture latency p50 and p95 recorded per site.
 5. `pnpm typecheck`, `pnpm lint` and `pnpm test` pass.
 6. Metrics document committed.
+
+## 7. Step 3 and Step 4 Deliverables
+
+### Step 3: MCP tool server
+
+Tasks, in order:
+
+1. Add an MCP stdio entry point using the approved SDK. An MCP client must initialize and list Aether's seven tools.
+2. Route `navigate`, `act`, `find`, `read`, `screenshot`, `ask`, and `done` through the shared Zod schemas and existing Perceiver/Actor/CDP packages.
+3. Keep the Direct CDP path available for deterministic MCP integration tests.
+
+Exit gate: an MCP client initializes, lists and calls all seven tools against fixtures through stdio; page-derived text is wrapped as untrusted; `pnpm typecheck`, `pnpm lint`, and `pnpm test` pass. The connected MCP host supplies reasoning; there is no in-process Anthropic loop.
+
+### Step 4: Extension transport
+
+1. Add the MV3 extension, native messaging host, and React side panel with a step ticker.
+2. Connect the native host to the MCP server over the authenticated loopback WebSocket bridge. Route extension operations through the same engine interfaces and shared wire schemas as Direct CDP.
+3. Add the Windows native-host registration path and run `scripts/spikes/native-host-stdio.ps1` to verify the Windows launcher and framed stdio path. No roadmap section exists in this plan, so this is the named Step 4 spike for the current implementation.
+
+Exit gate: MCP calls reach the selected Chrome tab through the extension, the side panel shows connection and step state, and fixture tests cover the bridge; `pnpm typecheck`, `pnpm lint`, and `pnpm test` pass. Real-profile task metrics are recorded when the configured MCP host exposes its model usage data.
+
+No Step 4 implementation starts until the Step 3 exit gate passes.

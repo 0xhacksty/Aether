@@ -149,7 +149,9 @@ describe('Step 2 Actor Tests: Trusted CDP Input Dispatch & DOM Settle', () => {
     expect(result.success).toBe(true);
     expect(result.executedCount).toBe(3);
 
-    const evalRes = await session.send<{ result: { value: any } }>('Runtime.evaluate', {
+    const evalRes = await session.send<{
+      result: { value: { name: string; email: string; newsletter: boolean } };
+    }>('Runtime.evaluate', {
       expression: `({
         name: document.getElementById('username').value,
         email: document.getElementById('email').value,

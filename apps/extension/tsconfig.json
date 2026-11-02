@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "types": ["chrome", "node"],
+    "composite": true,
+    "noEmit": true
+  },
+  "references": [{ "path": "../../packages/shared" }],
+  "include": ["**/*.ts", "**/*.tsx", ".wxt/types/**/*.d.ts"]
+}

@@ -6,6 +6,7 @@
     "composite": true
   },
   "references": [
+    { "path": "../../packages/actor" },
     { "path": "../../packages/shared" },
     { "path": "../../packages/cdp" },
     { "path": "../../packages/perceiver" }

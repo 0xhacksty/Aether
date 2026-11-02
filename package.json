@@ -5,19 +5,24 @@
   "description": "Aether: Authentic Agentic Browser Engine",
   "scripts": {
     "build": "pnpm -r run build",
-    "typecheck": "tsc --build --verbose",
+    "typecheck": "pnpm --filter @aether/extension run prepare && tsc --build --verbose",
+    "lint": "biome lint .",
     "test": "vitest run",
     "test:watch": "vitest",
     "probe": "tsx apps/cli/src/index.ts probe",
-    "demo": "tsx scripts/demo-live.ts"
+    "mcp": "tsx apps/cli/src/index.ts mcp",
+    "demo": "tsx scripts/demo-live.ts",
+    "extension:build": "pnpm --filter @aether/extension build",
+    "native-host:build": "pnpm --filter @aether/native-host build"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.6.4",
     "@types/node": "^22.10.2",
     "@types/ws": "^8.5.13",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "vitest": "^2.1.8",
-    "zod": "^3.24.1",
-    "ws": "^8.18.0"
+    "ws": "^8.18.0",
+    "zod": "^3.24.1"
   }
 }
